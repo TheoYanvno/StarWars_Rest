@@ -1,63 +1,37 @@
-# Flask Boilerplate for Profesional Development
+# Star Wars REST API
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer/)
-<p align="center">
-    <a href="https://youtu.be/ORxQ-K3BzQA"><img height="200px" src="https://github.com/4GeeksAcademy/flask-rest-hello/blob/main/docs/assets/how-to.png?raw=true?raw=true" /></a>
-</p>
+A REST API built with **Python, Flask and SQLAlchemy** for a Star Wars blog. Users can save favorite characters and planets.
 
-## Features
+**Tech:** Python · Flask · SQLAlchemy ORM · Flask-Migrate · PostgreSQL / SQLite · Flask-Admin
 
-- Extensive documentation [here](https://start.4geeksacademy.com).
-- Integrated with Pipenv for package managing.
-- Fast deloyment to heroku with `$ pipenv run deploy`.
-- Use of `.env` file.
-- SQLAlchemy integration for database abstraction.
+## Data model
 
-## Installation (automatic if you are using gitpod)
+Four SQLAlchemy model classes ([`src/models.py`](src/models.py)) with foreign-key relationships:
 
-> Important: The boiplerplate is made for python 3.7 but you can easily change the `python_version` on the Pipfile.
+- `User` — email, password, active flag
+- `Character` and `Planet` — name and description
+- `Favorites` — links a user to a favorite character or planet (`USER_ID`, `FAV_CHARACTER_ID`, `FAV_PLANET_ID`)
 
-The following steps are automatically runned withing gitpod, if you are doing a local installation you have to do them manually:
+## Endpoints
 
-```sh
-pipenv install;
-mysql -u root -e "CREATE DATABASE example";
-pipenv run init;
-pipenv run migrate;
-pipenv run upgrade;
-```
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/user` | Create a user |
+| GET | `/user` | List users |
+| GET | `/user/favorites` | List favorites |
+| POST | `/favorites/planets/<planet_id>` | Add a favorite planet (`{ "user_id": 1 }`) |
+| POST | `/favorites/character/<character_id>` | Add a favorite character |
+| DELETE | `/user/<user_id>/favorites/planets/<planet_id>` | Remove a favorite planet |
+| DELETE | `/user/<user_id>/favorites/characters/<character_id>` | Remove a favorite character |
 
-## How to Start coding?
-
-There is an example API working with an example database. All your application code should be written inside the `./src/` folder.
-
-- src/main.py (it's where your endpoints should be coded)
-- src/models.py (your database tables and serialization logic)
-- src/utils.py (some reusable classes and functions)
-- src/admin.py (add your models to the admin and manage your data easily)
-
-For a more detailed explanation, look for the tutorial inside the `docs` folder.
-
-## Remember to migrate every time you change your models
-
-You have to migrate and upgrade the migrations for every update you make to your models:
+## Run it
 
 ```bash
-$ pipenv run migrate #(to make the migrations)
-$ pipenv run upgrade  #(to update your databse with the migrations)
+pipenv install
+pipenv run migrate && pipenv run upgrade   # create tables
+pipenv run start                          # http://localhost:3000
 ```
 
+Set `DATABASE_URL` to use PostgreSQL; without it the app uses SQLite. An admin panel is available at `/admin`.
 
-# Manual Installation for Ubuntu & Mac
-
-⚠️ Make sure you have `python 3.6+` and `MySQL` installed on your computer and MySQL is running, then run the following commands:
-```sh
-$ pipenv install (to install pip packages)
-$ pipenv run migrate (to create the database)
-$ pipenv run start (to start the flask webserver)
-```
-
-
-## Publish/Deploy your website!
-
-This boilerplate it's 100% read to deploy with Render.com and Herkou in a matter of minutes. Please read the [official documentation about it](https://start.4geeksacademy.com/deploy).
+Built as part of the 4Geeks Academy Full Stack Software Development program (2023), starting from the academy's Flask boilerplate (original notes in [`docs/BOILERPLATE_README.md`](docs/BOILERPLATE_README.md)).

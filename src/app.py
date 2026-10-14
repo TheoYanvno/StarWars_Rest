@@ -59,7 +59,7 @@ def get_users():
 @app.route('/user/favorites', methods=['GET'])
 def get_favorites():
 
-    favorites =favorites.query.all()
+    favorites = Favorites.query.all()
     all_favorites = list(map(lambda x: x.serialize(), favorites))
     return jsonify(all_favorites), 200
 

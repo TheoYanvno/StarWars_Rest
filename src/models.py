@@ -14,8 +14,7 @@ class User(db.Model):
         return {
             "id": self.id,
             "email": self.email,
-            "password": self.password,
-            # do not serialize the password, its a security breach
+            # password is intentionally not returned
         }
 class Favorites(db.Model):
     __tablename__ = 'Favorites'
@@ -26,6 +25,13 @@ class Favorites(db.Model):
     user = db.relationship("User", foreign_keys=[USER_ID])
     character = db.relationship('Character')
     planet = db.relationship('Planet')
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.USER_ID,
+            "character_id": self.FAV_CHARACTER_ID,
+            "planet_id": self.FAV_PLANET_ID
+        }
 class Character(db.Model):
     __tablename__ = 'Character'
     id = db.Column(db.Integer, primary_key=True)
@@ -36,7 +42,6 @@ class Character(db.Model):
             "id": self.id,
             "name": self.name,
             "description": self.description
-            # do not serialize the password, its a security breach
         }
 class Planet(db.Model):
     __tablename__ = 'Planet'
@@ -48,5 +53,4 @@ class Planet(db.Model):
             "id": self.id,
             "name": self.name,
             "description": self.description
-            # do not serialize the password, its a security breach
         }
